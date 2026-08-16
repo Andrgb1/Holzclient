@@ -1,21 +1,32 @@
-steps:
-  - name: Checkout
-    uses: actions/checkout@v4
+name: Build HolzClient
 
-  - name: Set up Java 17
-    uses: actions/setup-java@v4
-    with:
-      distribution: 'temurin'
-      java-version: '17'
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch: {}
 
-  - name: Make gradlew executable
-    run: chmod +x ./gradlew
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-  - name: Build with Gradle
-    run: ./gradlew build --no-daemon
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  - name: Upload artifact
-    uses: actions/upload-artifact@v4
-    with:
-      name: holzclient-jar
-      path: build/libs/*.jar
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew build --no-daemon
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: holzclient-jar
+          path: build/libs/*.jar
