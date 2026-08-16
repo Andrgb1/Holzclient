@@ -19,11 +19,17 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
-
-      - name: Build with Gradle
-        run: ./gradlew build --no-daemon
+      - name: Build with Gradle (use wrapper if present, otherwise install Gradle)
+        run: |
+          if [ -f "./gradlew" ]; then
+            chmod +x ./gradlew
+            ./gradlew build --no-daemon --stacktrace
+          else
+            echo "No gradlew found — installing gradle via apt"
+            sudo apt-get update
+            sudo apt-get install -y gradle
+            gradle build --no-daemon --stacktrace
+          fi
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
