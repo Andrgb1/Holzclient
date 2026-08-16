@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "holzclient",
+  "version": "1.0.0",
+  "name": "HolzClient",
+  "description": "HolzClient - Singleplayer-only utility client",
+  "entrypoints": {
+    "client": [
+      "com.holzclient.ClientMod"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.14.0",
+    "fabric": "*",
+    "minecraft": "1.21.11"
+  }
+}
