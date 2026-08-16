@@ -44,15 +44,16 @@ public class ModuleManager {
 
     public static List<Module> getModules() { return modules; }
 
-    // Hier wird bei jedem Tick geprüft, ob wir in Singleplayer sind.
-    // Wenn nicht, werden aktivierte Module deaktiviert.
+    // Die Mod läuft nur, wenn entweder Singleplayer erkannt wird
+    // oder die Konfigurationsoption allowMultiplayer=true gesetzt ist.
     public static void tickAll(MinecraftClient client) {
         boolean singleplayer = client.getServer() != null && !client.getServer().isDedicated();
+        boolean allowed = singleplayer || com.holzclient.Config.instance.allowMultiplayer;
         for (Module m : modules) {
-            if (m.isEnabled() && !singleplayer) {
+            if (m.isEnabled() && !allowed) {
                 m.setEnabled(false);
                 if (client.player != null) {
-                    client.player.sendMessage(net.minecraft.text.Text.of(m.getName() + " deaktiviert (kein Singleplayer)."), false);
+                    client.player.sendMessage(net.minecraft.text.Text.of(m.getName() + " deaktiviert (nur Singleplayer oder allowMultiplayer=false)."), false);
                 }
             }
             if (m.isEnabled()) m.tick(client);
